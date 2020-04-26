@@ -1,4 +1,5 @@
 ﻿using System;
+using ChainOfResponsibility.Approver;
 
 namespace ChainOfResponsibility
 {
@@ -6,9 +7,9 @@ namespace ChainOfResponsibility
     {
         private static void Main(string[] args)
         {
-            Approver director = new Director();
-            Approver vicePresident = new VicePresident();
-            Approver president = new President();
+            IApprover director = new Director();
+            IApprover vicePresident = new VicePresident();
+            IApprover president = new President();
 
             director.Successor = vicePresident;
             vicePresident.Successor = president;
@@ -27,70 +28,65 @@ namespace ChainOfResponsibility
     }
 
     //Handler
-    internal abstract class Approver
-    {
-        public Approver Successor { get; set; }
 
-        public abstract void ProcessRequest(Purchase purchase);
-    }
 
-    internal class Director : Approver
-    {
-        public override void ProcessRequest(Purchase purchase)
-        {
-            if (purchase.Amount < 10000.0)
-            {
-                Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
-            }
-            else if (Successor != null)
-            {
-                Successor.ProcessRequest(purchase);
-            }
-        }
-    }
+    //internal class Director : Approver
+    //{
+    //    public override void ProcessRequest(Purchase purchase)
+    //    {
+    //        if (purchase.Amount < 10000.0)
+    //        {
+    //            Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
+    //        }
+    //        else if (Successor != null)
+    //        {
+    //            Successor.ProcessRequest(purchase);
+    //        }
+    //    }
+    //}
 
-    internal class VicePresident : Approver
-    {
-        public override void ProcessRequest(Purchase purchase)
-        {
-            if (purchase.Amount < 25000.0)
-            {
-                Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
-            }
-            else if (Successor != null)
-            {
-                Successor.ProcessRequest(purchase);
-            }
-        }
-    }
+    //internal class VicePresident : Approver
+    //{
+    //    public override void ProcessRequest(Purchase purchase)
+    //    {
+    //        if (purchase.Amount < 25000.0)
+    //        {
+    //            Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
+    //        }
+    //        else if (Successor != null)
+    //        {
+    //            Successor.ProcessRequest(purchase);
+    //        }
+    //    }
+    //}
 
-    internal class President : Approver
-    {
-        public override void ProcessRequest(Purchase purchase)
-        {
-            if (purchase.Amount < 100000.0)
-            {
-                Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
-            }
-            else
-            {
-                Console.WriteLine($"Request# {purchase.Number} requires an executive meeting!");
-            }
-        }
-    }
+    //internal class President : Approver
+    //{
+    //    public override void ProcessRequest(Purchase purchase)
+    //    {
+    //        if (purchase.Amount < 100000.0)
+    //        {
+    //            Console.WriteLine($"{this.GetType().Name} approved request# {purchase.Number}");
+    //        }
+    //        else
+    //        {
+    //            Console.WriteLine($"Request# {purchase.Number} requires an executive meeting!");
+    //        }
+    //    }
+    //}
 
-    public class Purchase
-    {
-        public double Amount { get; internal set; }
-        public int Number { get; internal set; }
+    //public class Purchase
+    //{
+    //    public double Amount { get; internal set; }
+    //    public int Number { get; internal set; }
 
-        public string Purpose { get; set; }
+    //    public string Purpose { get; set; }
 
-        public Purchase(int number, double amount, string purpose)
-        {
-            Amount = amount;
-            Number = number;
-            Purpose = purpose;
-        }
-    }
+    //    public Purchase(int number, double amount, string purpose)
+    //    {
+    //        Amount = amount;
+    //        Number = number;
+    //        Purpose = purpose;
+    //    }
+    //}
 }
